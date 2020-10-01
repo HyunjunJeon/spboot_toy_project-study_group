@@ -18,3 +18,8 @@ target/
 *.iws
 *.iml
 *.ipr
+
+### NPM
+src/main/resources/static/frontLib/node_modules
+src/main/resources/static/frontLib/node
+src/main/resources/static/frontLib/package-lock.json

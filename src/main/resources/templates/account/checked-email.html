@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Study Group</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-</head>
-<style>
-    .container {
-        max-width: 100%;
-    }
-</style>
+<head th:replace="/fragements/fragements :: head"></head>
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" th:href="@{/}">
@@ -53,5 +44,7 @@
         </h2>
         <small class="text-info">이제부터 가입할 때 사용한 이메일 또는 닉네임으로 로그인 할 수 있습니다.</small>
     </div>
+    <script src="/frontLib/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/frontLib/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
