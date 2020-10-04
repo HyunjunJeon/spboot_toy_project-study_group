@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="~{/fragements/fragements :: head}"></head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragements/fragements :: head"></head>
 <body class="bg-light">
-    <div th:replace="~{/fragements/fragements :: main-nav}"></div>
+    <div th:replace="/fragements/fragements :: main-nav"></div>
     <div class="alert alert-warning" role="alert" th:if="${account != null && !account.emailVerified}">
         스터디그룹 사이트 가입을 완료하려면 <a th:href="@{/check-email}" class="alert-link">계정 인증 메일을 확인</a> 하세요
     </div>
@@ -13,7 +13,7 @@
         </div>
         <div class="row justify-content-center"></div>
     </div>
-    <div th:replace="~{/fragements/fragements :: footer}"></div>
+    <div th:replace="/fragements/fragements :: footer"></div>
     <script src="/frontLib/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/frontLib/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>

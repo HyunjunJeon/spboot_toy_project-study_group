@@ -57,11 +57,6 @@ public class Account {
     }
 
     public void completeSignUp() {
-        /*
-            컨트롤러 부분에서 존재하던 기능코드를 Account로 옮김
-            account.setEmailVerified(true);
-            account.setJoinedAt(LocalDateTime.now());
-         */
         this.emailVerified = true;
         this.joinedAt = LocalDateTime.now();
     }
