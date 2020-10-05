@@ -26,6 +26,8 @@ public class Account {
 
     private String emailCheckToken; // 이메일 인증 토큰 저장해서 빠른 비교
 
+    private LocalDateTime emailCheckTokenGeneratedAt;
+
     private LocalDateTime joinedAt;
 
     private String bio; // 자기소개
@@ -63,5 +65,9 @@ public class Account {
 
     public boolean isValidToken(String token) {
         return emailCheckToken.equals(token);
+    }
+
+    public boolean canSendConfirmEmail() {
+        return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
     }
 }

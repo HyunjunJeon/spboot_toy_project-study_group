@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragements/fragements :: head"></head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" th:href="@{/}">
+            <img src="/images/logo.png" width="30" height="30">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <form th:action="@{/search/study}" class="form-inline" method="get">
+                        <input class="form-control mr-sm-2" name="keyword" type="search" placeholder="스터디 찾기">
+                    </form>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav justify-content-end">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/login}">로그인</a>
+                </li>
+                <li>
+                    <a class="nav-link" th:href="@{/signup}">가입</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="py-5 text-center" th:if="${error != null}">
+            <p class="lead">스터디그룹 가입</p>
+            <div class="alert alert-danger" role="alert" th:text="${error}"></div>
+            <p class="lead" th:text="${email}"></p>
+        </div>
+        <div class="py-5 text-center" th:if="${error == null}">
+            <p class="lead">스터디그룹 가입</p>
+            <h2>스터디그룹 서비스를 사용하려면 인증 이메일을 확인하세요.</h2>
+            <div>
+                <p class="lead" th:text="${email}"></p>
+                <a class="btn btn-outline-info" th:href="@{/resend-confirm-email}">인증 이메일 다시 보내기</a>
+            </div>
+        </div>
+    </div>
+    <footer th:replace="/fragements/fragements :: footer"></footer>
+    <script src="/frontLib/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/frontLib/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
