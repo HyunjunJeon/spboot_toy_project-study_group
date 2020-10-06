@@ -1,3 +1,10 @@
 spring:
   profiles:
     active: local
+
+
+server:
+  servlet:
+    application-display-name: 현준-스터디그룹
+    session:
+      timeout: 5m
