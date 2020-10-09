@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragements/fragements :: head"></head>
+<body class="bg-light">
+    <div th:replace="/fragements/fragements :: main-nav"></div>
+    <div class="container">
+        <div class="row mt-5 justify-content-center">
+            <div class="col-2">
+                <div th:replace="/fragements/fragements :: settings-menu(currentMenu='profile')"></div>
+            </div>
+            <div class="col-8">
+                <div class="alert alert-info alert-dismissible fade show mt-3" role="alert" th:if="${message}">
+                    <span th:text="${message}"></span>
+                    <button class="close" data-dismiss="alert" aria-label="close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="row">
+                    <h2 class="col-sm-12" th:text="${account.nickname}"></h2>
+                </div>
+                <div class="row mt-3">
+                    <form class="col-sm-6" th:action="@{/settings/profile}" method="post" th:object="${profile}" novalidate>
+                        <div class="form-group">
+                            <label for="bio">한줄 소개</label>
+                            <input type="text" class="form-control" id="bio" th:field="*{bio}" placeholder="간략한 자기소개를 써주세요."
+                                aria-describedby="bioHelp" required>
+                            <small class="form-text text-muted" id="bioHelp">길지 않게 32자 이내로 입력하세요.</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}">조금 길어요</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="url">링크</label>
+                            <input type="text" class="form-control" id="url" th:field="*{url}" placeholder="http://jhj-toyproject.org"
+                                   aria-describedby="urlHelp" required>
+                            <small class="form-text text-muted" id="urlHelp">본인을 표현할 수 있는 링크를 추가해주세요(블로그, 유튜브 등)</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('url')}" th:errors="*{url}">
+                                올바른 URL이 아닙니다. 예시처럼 입력해주세요.
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label for="occupation">직업</label>
+                            <input type="text" class="form-control" id="occupation" placeholder="어떤 직업을 가지고 계신가요?"
+                                th:field="*{occupation}" aria-describedby="occupationHelp" required>
+                            <small class="form-text text-muted">개발자? 매니저? 취준생? 대표님? 등등...</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="location">활동 지역</label>
+                            <input type="text" id="location" class="form-control"
+                                placeholder="대한민국 서울" aria-describedby="locationHelp" required>
+                            <small class="form-text text-muted" id="locationHelp">
+                                주요 활동 지역의 도시 이름을 알려주세요.
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary btn-block" type="submit" aria-describedby="submitHelp">
+                                수정하기
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer th:replace="/fragements/fragements :: footer"></footer>
+</body>
+</html>
