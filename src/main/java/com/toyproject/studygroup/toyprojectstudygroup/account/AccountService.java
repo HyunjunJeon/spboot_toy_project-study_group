@@ -1,7 +1,7 @@
 package com.toyproject.studygroup.toyprojectstudygroup.account;
 
 import com.toyproject.studygroup.toyprojectstudygroup.domain.Account;
-import com.toyproject.studygroup.toyprojectstudygroup.settings.Profile;
+import com.toyproject.studygroup.toyprojectstudygroup.settings.ProfileForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -98,12 +98,17 @@ public class AccountService implements UserDetailsService {
         login(account);
     }
 
-    public void updateProfile(Account account, Profile profile) {
-        account.setBio(profile.getBio());
-        account.setUrl(profile.getUrl());
-        account.setOccupation(profile.getOccupation());
-        account.setLocation(profile.getLocation());
+    public void updateProfile(Account account, ProfileForm profileForm) {
+        account.setBio(profileForm.getBio());
+        account.setUrl(profileForm.getUrl());
+        account.setOccupation(profileForm.getOccupation());
+        account.setLocation(profileForm.getLocation());
+        account.setProfileImage(profileForm.getProfileImage());
+        accountRepository.save(account);
+    }
 
+    public void updatePassword(Account account, String newPassword) {
+        account.setPassword(passwordEncoder.encode(newPassword));
         accountRepository.save(account);
     }
 }
