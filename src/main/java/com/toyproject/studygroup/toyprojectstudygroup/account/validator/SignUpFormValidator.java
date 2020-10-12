@@ -1,5 +1,7 @@
-package com.toyproject.studygroup.toyprojectstudygroup.account;
+package com.toyproject.studygroup.toyprojectstudygroup.account.validator;
 
+import com.toyproject.studygroup.toyprojectstudygroup.account.AccountRepository;
+import com.toyproject.studygroup.toyprojectstudygroup.account.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

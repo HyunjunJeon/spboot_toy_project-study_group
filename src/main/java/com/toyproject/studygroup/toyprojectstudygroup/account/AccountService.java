@@ -1,8 +1,10 @@
 package com.toyproject.studygroup.toyprojectstudygroup.account;
 
+import com.toyproject.studygroup.toyprojectstudygroup.account.form.SignUpForm;
 import com.toyproject.studygroup.toyprojectstudygroup.domain.Account;
-import com.toyproject.studygroup.toyprojectstudygroup.settings.NotificationForm;
-import com.toyproject.studygroup.toyprojectstudygroup.settings.ProfileForm;
+import com.toyproject.studygroup.toyprojectstudygroup.settings.form.NicknameForm;
+import com.toyproject.studygroup.toyprojectstudygroup.settings.form.NotificationForm;
+import com.toyproject.studygroup.toyprojectstudygroup.settings.form.ProfileForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
@@ -102,11 +104,6 @@ public class AccountService implements UserDetailsService {
     }
 
     public void updateProfile(Account account, ProfileForm profileForm) {
-//        account.setBio(profileForm.getBio());
-//        account.setUrl(profileForm.getUrl());
-//        account.setOccupation(profileForm.getOccupation());
-//        account.setLocation(profileForm.getLocation());
-//        account.setProfileImage(profileForm.getProfileImage());
         modelMapper.map(profileForm, account);
         accountRepository.save(account);
     }
@@ -117,13 +114,13 @@ public class AccountService implements UserDetailsService {
     }
 
     public void updateNotification(Account account, NotificationForm notificationForm) {
-//        account.setStudyCreatedByEmail(notificationForm.isStudyCreatedByEmail());
-//        account.setStudyCreatedByWeb(notificationForm.isStudyCreatedByWeb());
-//        account.setStudyEnrollmentResultByEmail(notificationForm.isStudyEnrollmentResultByEmail());
-//        account.setStudyEnrollmentResultByWeb(notificationForm.isStudyEnrollmentResultByWeb());
-//        account.setStudyUpdateByEmail(notificationForm.isStudyUpdatedByEmail());
-//        account.setStudyUpdateByWeb(notificationForm.isStudyUpdatedByWeb());
         modelMapper.map(notificationForm, account);
         accountRepository.save(account);
+    }
+
+    public void updateNickname(Account account, NicknameForm nicknameForm) {
+        modelMapper.map(nicknameForm, account);
+        accountRepository.save(account);
+        login(account); // 업데이트된 Nickname으로 로그인이 다시 되어야 View에서 Auth 정보를 참조할 수 있기 때문
     }
 }

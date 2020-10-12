@@ -2,7 +2,7 @@ package com.toyproject.studygroup.toyprojectstudygroup.main;
 
 import com.toyproject.studygroup.toyprojectstudygroup.account.AccountRepository;
 import com.toyproject.studygroup.toyprojectstudygroup.account.AccountService;
-import com.toyproject.studygroup.toyprojectstudygroup.account.SignUpForm;
+import com.toyproject.studygroup.toyprojectstudygroup.account.form.SignUpForm;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,13 +1,12 @@
 package com.toyproject.studygroup.toyprojectstudygroup;
 
 import com.toyproject.studygroup.toyprojectstudygroup.account.AccountService;
-import com.toyproject.studygroup.toyprojectstudygroup.account.SignUpForm;
+import com.toyproject.studygroup.toyprojectstudygroup.account.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 

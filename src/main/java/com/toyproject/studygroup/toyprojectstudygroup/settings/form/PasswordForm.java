@@ -1,4 +1,4 @@
-package com.toyproject.studygroup.toyprojectstudygroup.settings;
+package com.toyproject.studygroup.toyprojectstudygroup.settings.form;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;

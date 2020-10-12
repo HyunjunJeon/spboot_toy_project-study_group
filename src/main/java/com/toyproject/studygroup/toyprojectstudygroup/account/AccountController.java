@@ -1,5 +1,7 @@
 package com.toyproject.studygroup.toyprojectstudygroup.account;
 
+import com.toyproject.studygroup.toyprojectstudygroup.account.form.SignUpForm;
+import com.toyproject.studygroup.toyprojectstudygroup.account.validator.SignUpFormValidator;
 import com.toyproject.studygroup.toyprojectstudygroup.domain.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -96,4 +98,6 @@ public class AccountController {
 
         return "account/profile";
     }
+
+
 }
