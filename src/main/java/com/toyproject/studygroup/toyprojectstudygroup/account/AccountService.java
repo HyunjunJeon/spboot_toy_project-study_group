@@ -1,8 +1,10 @@
 package com.toyproject.studygroup.toyprojectstudygroup.account;
 
 import com.toyproject.studygroup.toyprojectstudygroup.domain.Account;
+import com.toyproject.studygroup.toyprojectstudygroup.settings.NotificationForm;
 import com.toyproject.studygroup.toyprojectstudygroup.settings.ProfileForm;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +28,7 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
@@ -99,16 +102,28 @@ public class AccountService implements UserDetailsService {
     }
 
     public void updateProfile(Account account, ProfileForm profileForm) {
-        account.setBio(profileForm.getBio());
-        account.setUrl(profileForm.getUrl());
-        account.setOccupation(profileForm.getOccupation());
-        account.setLocation(profileForm.getLocation());
-        account.setProfileImage(profileForm.getProfileImage());
+//        account.setBio(profileForm.getBio());
+//        account.setUrl(profileForm.getUrl());
+//        account.setOccupation(profileForm.getOccupation());
+//        account.setLocation(profileForm.getLocation());
+//        account.setProfileImage(profileForm.getProfileImage());
+        modelMapper.map(profileForm, account);
         accountRepository.save(account);
     }
 
     public void updatePassword(Account account, String newPassword) {
         account.setPassword(passwordEncoder.encode(newPassword));
+        accountRepository.save(account);
+    }
+
+    public void updateNotification(Account account, NotificationForm notificationForm) {
+//        account.setStudyCreatedByEmail(notificationForm.isStudyCreatedByEmail());
+//        account.setStudyCreatedByWeb(notificationForm.isStudyCreatedByWeb());
+//        account.setStudyEnrollmentResultByEmail(notificationForm.isStudyEnrollmentResultByEmail());
+//        account.setStudyEnrollmentResultByWeb(notificationForm.isStudyEnrollmentResultByWeb());
+//        account.setStudyUpdateByEmail(notificationForm.isStudyUpdatedByEmail());
+//        account.setStudyUpdateByWeb(notificationForm.isStudyUpdatedByWeb());
+        modelMapper.map(notificationForm, account);
         accountRepository.save(account);
     }
 }

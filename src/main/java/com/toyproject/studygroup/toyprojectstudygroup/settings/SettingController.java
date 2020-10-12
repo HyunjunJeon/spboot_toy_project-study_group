@@ -4,6 +4,7 @@ import com.toyproject.studygroup.toyprojectstudygroup.account.AccountService;
 import com.toyproject.studygroup.toyprojectstudygroup.account.CurrentUser;
 import com.toyproject.studygroup.toyprojectstudygroup.domain.Account;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 public class SettingController {
 
     private final AccountService accountService;
+    private final ModelMapper modelMapper;
 
     @InitBinder("passwordForm")
     public void initBinder(WebDataBinder webDataBinder){
@@ -28,7 +30,7 @@ public class SettingController {
     @GetMapping("/profile")
     public String updateProfileForm(@CurrentUser Account account, Model model){
         model.addAttribute(account);
-        model.addAttribute("profile", new ProfileForm(account));
+        model.addAttribute("profile", modelMapper.map(account, ProfileForm.class));
 
         return "settings/profile";
     }
@@ -67,5 +69,27 @@ public class SettingController {
         attributes.addFlashAttribute("message", "비밀번호를 수정했습니다.");
 
         return "redirect:/settings/password";
+    }
+
+    @GetMapping("/notifications")
+    public String updateNotificationForm(@CurrentUser Account account, Model model){
+        model.addAttribute(account);
+        model.addAttribute(modelMapper.map(account, NotificationForm.class));
+
+        return "settings/notifications";
+    }
+
+    @PostMapping("/notifications")
+    public String updateNotification(@CurrentUser Account account, @Valid @ModelAttribute NotificationForm notificationForm, Errors errors,
+                                     Model model, RedirectAttributes attributes){
+        if(errors.hasErrors()){
+            model.addAttribute(account);
+            return "settings/notifications";
+        }
+
+        accountService.updateNotification(account, notificationForm);
+        attributes.addFlashAttribute("message", "알림 설정을 수정했습니다.");
+
+        return "redirect:/settings/notifications";
     }
 }
