@@ -68,6 +68,10 @@ public class Account {
     }
 
     public boolean canSendConfirmEmail() {
+        if(this.emailCheckTokenGeneratedAt == null){
+            this.emailCheckTokenGeneratedAt = LocalDateTime.now();
+            return true;
+        }
         return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
     }
 }

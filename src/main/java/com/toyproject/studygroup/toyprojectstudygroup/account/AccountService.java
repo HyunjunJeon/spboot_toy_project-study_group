@@ -123,4 +123,14 @@ public class AccountService implements UserDetailsService {
         accountRepository.save(account);
         login(account); // 업데이트된 Nickname으로 로그인이 다시 되어야 View에서 Auth 정보를 참조할 수 있기 때문
     }
+
+    public void sendLoginLink(Account account) {
+        account.generateEmailCheckToken();
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(account.getEmail());
+        mailMessage.setSubject("스터디그룹, 회원 가입 인증");
+        mailMessage.setText("/login-by-email?token="+account.getEmailCheckToken()+
+                "&email="+account.getEmail());
+        javaMailSender.send(mailMessage);
+    }
 }
