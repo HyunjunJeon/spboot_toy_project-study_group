@@ -1,17 +1,19 @@
 package com.toyproject.studygroup.toyprojectstudygroup.settings;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toyproject.studygroup.toyprojectstudygroup.account.AccountRepository;
 import com.toyproject.studygroup.toyprojectstudygroup.account.AccountService;
 import com.toyproject.studygroup.toyprojectstudygroup.account.CurrentUser;
 import com.toyproject.studygroup.toyprojectstudygroup.domain.Account;
-import com.toyproject.studygroup.toyprojectstudygroup.settings.form.NicknameForm;
-import com.toyproject.studygroup.toyprojectstudygroup.settings.form.NotificationForm;
-import com.toyproject.studygroup.toyprojectstudygroup.settings.form.PasswordForm;
-import com.toyproject.studygroup.toyprojectstudygroup.settings.form.ProfileForm;
+import com.toyproject.studygroup.toyprojectstudygroup.domain.Tag;
+import com.toyproject.studygroup.toyprojectstudygroup.settings.form.*;
 import com.toyproject.studygroup.toyprojectstudygroup.settings.validator.NicknameValidator;
 import com.toyproject.studygroup.toyprojectstudygroup.settings.validator.PasswordFormValidator;
+import com.toyproject.studygroup.toyprojectstudygroup.tag.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -20,6 +22,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/settings")
@@ -28,6 +33,8 @@ public class SettingController {
     private final AccountService accountService;
     private final AccountRepository accountRepository;
     private final ModelMapper modelMapper;
+    private final TagRepository tagRepository;
+    private final ObjectMapper objectMapper;
 
     @InitBinder("passwordForm")
     public void passwordFormInitBinder(WebDataBinder webDataBinder){
@@ -125,5 +132,47 @@ public class SettingController {
         attributes.addFlashAttribute("message", "닉네임을 수정했습니다.");
 
         return "redirect:/settings/account";
+    }
+
+    @GetMapping("/tags")
+    public String updateTagForm(@CurrentUser Account account, Model model) throws JsonProcessingException {
+        model.addAttribute(account);
+        Set<Tag> tags = accountService.getTags(account);
+        model.addAttribute("tags", tags.stream().map(Tag::getTitle).collect(Collectors.toList()));
+
+        List<String> allTags = tagRepository.findAll().stream().map(Tag::getTitle).collect(Collectors.toList());
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(allTags));
+
+        return "settings/tags";
+    }
+
+    @PostMapping("/tags/add")
+    @ResponseBody
+    public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm){
+        String tagTitle = tagForm.getTagTitle();
+
+        Tag tag = tagRepository.findByTitle(tagTitle);
+        if(tag == null){
+            tag = tagRepository.save(Tag.builder().title(tagTitle).build());
+        }
+
+        accountService.addTag(account, tag);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/tags/remove")
+    @ResponseBody
+    public ResponseEntity removeTag(@CurrentUser Account account, @RequestBody TagForm tagForm){
+        String tagTitle = tagForm.getTagTitle();
+
+        Tag tag = tagRepository.findByTitle(tagTitle);
+        if(tag == null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        accountService.removeTag(account, tag);
+
+        return ResponseEntity.ok().build();
     }
 }

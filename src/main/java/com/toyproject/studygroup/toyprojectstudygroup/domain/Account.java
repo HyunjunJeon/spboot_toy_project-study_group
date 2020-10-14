@@ -56,7 +56,7 @@ public class Account {
     private boolean studyUpdateByWeb;
 
     @ManyToMany
-    private Set<Tag> tag;
+    private Set<Tag> tags;
 
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();

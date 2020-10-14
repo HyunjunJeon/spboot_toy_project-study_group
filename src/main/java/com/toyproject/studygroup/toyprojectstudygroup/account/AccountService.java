@@ -2,6 +2,7 @@ package com.toyproject.studygroup.toyprojectstudygroup.account;
 
 import com.toyproject.studygroup.toyprojectstudygroup.account.form.SignUpForm;
 import com.toyproject.studygroup.toyprojectstudygroup.domain.Account;
+import com.toyproject.studygroup.toyprojectstudygroup.domain.Tag;
 import com.toyproject.studygroup.toyprojectstudygroup.settings.form.NicknameForm;
 import com.toyproject.studygroup.toyprojectstudygroup.settings.form.NotificationForm;
 import com.toyproject.studygroup.toyprojectstudygroup.settings.form.ProfileForm;
@@ -22,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -132,5 +135,20 @@ public class AccountService implements UserDetailsService {
         mailMessage.setText("/login-by-email?token="+account.getEmailCheckToken()+
                 "&email="+account.getEmail());
         javaMailSender.send(mailMessage);
+    }
+
+    public void addTag(Account account, Tag tag) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getTags().add(tag));
+    }
+
+    public Set<Tag> getTags(Account account) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        return byId.orElseThrow().getTags();
+    }
+
+    public void removeTag(Account account, Tag tag) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getTags().remove(tag));
     }
 }
