@@ -87,7 +87,7 @@
     </div>
 </footer>
 
-<div class="list-group" th:fragment="settings-menu">
+<div class="list-group" th:fragment="settings-menu (currentMenu)">
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'profile'}? active" th:href="@{/settings/profile}">프로필</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'password'}? active" th:href="@{/settings/password}">비밀번호</a>
     <a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'notifications'}? active" th:href="@{/settings/notifications}">알림</a>
@@ -116,6 +116,16 @@
             })
         }, false)
     }())
+</script>
+
+<script type="application/javascript" th:fragment="ajax-csrf-header">
+    $(function(){
+        let csrfToken = /*[[${_csrf.token}]]*/ null;
+        let csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+        $(document).ajaxSend(function(e, xhr){
+            xhr.setRequestHeader(csrfHeader, csrfToken);
+        });
+    });
 </script>
 
 </html>
