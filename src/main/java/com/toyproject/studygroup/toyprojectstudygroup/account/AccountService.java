@@ -1,17 +1,22 @@
 package com.toyproject.studygroup.toyprojectstudygroup.account;
 
 import com.toyproject.studygroup.toyprojectstudygroup.account.form.SignUpForm;
+import com.toyproject.studygroup.toyprojectstudygroup.config.AppProperties;
 import com.toyproject.studygroup.toyprojectstudygroup.domain.Account;
 import com.toyproject.studygroup.toyprojectstudygroup.domain.Tag;
 import com.toyproject.studygroup.toyprojectstudygroup.domain.Zone;
+import com.toyproject.studygroup.toyprojectstudygroup.mail.EmailMessage;
+import com.toyproject.studygroup.toyprojectstudygroup.mail.EmailService;
 import com.toyproject.studygroup.toyprojectstudygroup.settings.form.NicknameForm;
 import com.toyproject.studygroup.toyprojectstudygroup.settings.form.NotificationForm;
 import com.toyproject.studygroup.toyprojectstudygroup.settings.form.ProfileForm;
 import com.toyproject.studygroup.toyprojectstudygroup.zone.ZoneRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -22,20 +27,25 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
-    private final JavaMailSender javaMailSender;
+    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
+    private final TemplateEngine templateEngine;
+    private final AppProperties appProperties;
 
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
@@ -51,13 +61,25 @@ public class AccountService implements UserDetailsService {
         return accountRepository.save(account);
     }
 
-    public void sendSignUpConfirmEmail(Account newAccount){
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(newAccount.getEmail());
-        mailMessage.setSubject("스터디그룹, 회원 가입 인증");
-        mailMessage.setText("/check-email-token?token="+newAccount.getEmailCheckToken()+
-                "&email="+newAccount.getEmail());
-        javaMailSender.send(mailMessage);
+    public void sendSignUpConfirmEmail(Account newAccount) {
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("link", "/check-email-token?token=" + newAccount.getEmailCheckToken() + "&email=" + newAccount.getEmail());
+        variables.put("nickname", newAccount.getNickname());
+        variables.put("linkName", "이메일 인증하기");
+        variables.put("message", "스터디그룹 서비스를 사용하려면 링크를 클릭하세요.");
+        variables.put("host", appProperties.getHost());
+
+        Context context = new Context();
+        context.setVariables(variables);
+
+        String htmlMessage = templateEngine.process("mail/email-auth", context);
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(newAccount.getEmail())
+                .subject("스터디그룹, 회원가입 인증")
+                .message(htmlMessage)
+                .build()
+        ;
+        emailService.sendEmail(emailMessage);
     }
 
     //TODO Spring Security 로그인쪽 공부를 더 해야함
@@ -124,12 +146,25 @@ public class AccountService implements UserDetailsService {
 
     public void sendLoginLink(Account account) {
         account.generateEmailCheckToken();
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(account.getEmail());
-        mailMessage.setSubject("스터디그룹, 회원 가입 인증");
-        mailMessage.setText("/login-by-email?token="+account.getEmailCheckToken()+
-                "&email="+account.getEmail());
-        javaMailSender.send(mailMessage);
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("link", "/login-by-email?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail());
+        variables.put("nickname", account.getNickname());
+        variables.put("linkName", "이메일로 로그인하기");
+        variables.put("message", "스터디그룹 서비스에 로그인하려면 아래 링크를 클릭하세요.");
+        variables.put("host", appProperties.getHost());
+
+        Context context = new Context();
+        context.setVariables(variables);
+
+        String htmlMessage = templateEngine.process("mail/email-auth", context);
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(account.getEmail())
+                .subject("스터디그룹, 이메일 로그인 링크")
+                .message(htmlMessage)
+                .build()
+                ;
+        emailService.sendEmail(emailMessage);
     }
 
     public void addTag(Account account, Tag tag) {

@@ -12,6 +12,7 @@ logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    web: DEBUG
 
 app:
   host: http://localhost:8080

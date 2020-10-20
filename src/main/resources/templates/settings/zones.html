@@ -20,14 +20,14 @@
                         </div>
                         <div id="whitelist" th:text="${whitelist}" hidden></div>
                         <input id="zones" type="text" name="zones" th:value="${#strings.listJoin(zones, ',')}"
-                               class="tagify-outside" aria-describedby="tagHelp"/>
+                               class="tagify-outside" aria-describedby="zoneHelp"/>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <script src="/frontLib/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
-    <script th:replace="/fragements/fragements :: ajax-csrf-header"></script>
+    <script th:replace="/fragements/fragements :: ajax-csrf-header" th:inline="javascript"></script>
     <script type="application/javascript">
         $(function () {
             function tagRequest(url, zoneName) {
@@ -57,6 +57,7 @@
             let tagInput = document.querySelector("#zones");
 
             let tagify = new Tagify(tagInput, {
+                pattern: /^.{0,20}$/,
                 enforceWhitelist: true,
                 whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
                 dropdown : {

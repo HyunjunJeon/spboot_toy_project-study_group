@@ -1,6 +1,8 @@
 package com.toyproject.studygroup.toyprojectstudygroup.account;
 
 import com.toyproject.studygroup.toyprojectstudygroup.domain.Account;
+import com.toyproject.studygroup.toyprojectstudygroup.mail.EmailMessage;
+import com.toyproject.studygroup.toyprojectstudygroup.mail.EmailService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,7 @@ public class AccountControllerTest {
     private AccountRepository accountRepository;
 
     @MockBean
-    JavaMailSender javaMailSender;
+    EmailService emailService;
 
     @DisplayName("회원가입 화면 잘 보이는지")
     @Test
@@ -45,7 +47,7 @@ public class AccountControllerTest {
                .andExpect(status().isOk())
                .andExpect(view().name("account/sign-up"))
                .andExpect(model().attributeExists("signUpForm"))
-               .andExpect(authenticated())
+               .andExpect(unauthenticated())
        ;
     }
 
@@ -81,7 +83,7 @@ public class AccountControllerTest {
         assertNotEquals(account.getPassword(), "123456789");
         assertNotNull(account.getEmailCheckToken());
 
-        then(javaMailSender).should().send(any(SimpleMailMessage.class));
+        then(emailService).should().sendEmail(any(EmailMessage.class));
 
     }
 
