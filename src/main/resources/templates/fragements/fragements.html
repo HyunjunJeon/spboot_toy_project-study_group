@@ -3,12 +3,14 @@
 <head th:fragement="head">
     <meta charset="UTF-8">
     <title>Study Group</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hi+Melody&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/frontLib/node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/frontLib/node_modules/font-awesome/css/font-awesome.min.css" />
     <script src="/frontLib/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/frontLib/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/frontLib/node_modules/jdenticon/dist/jdenticon.min.js"></script>
     <link rel="stylesheet" href="/frontLib/node_modules/@yaireo/tagify/dist/tagify.css">
+    <link rel="stylesheet" href="/frontLib/node_modules/summernote/dist/summernote-bs4.min.css">
     <style>
         .container {
             max-width: 100%;
@@ -52,8 +54,8 @@
                 </a>
             </li>
             <li sec:authorize="isAuthenticated()">
-                <a class="nav-link btn btn-outline-primary" th:href="@{/notifications}">
-                    <i class="fa fa-plus"></i> 스터디개설
+                <a class="nav-link btn btn-outline-primary" th:href="@{/new-studygroup}">
+                    <i class="fa fa-plus"></i> 스터디그룹 개설
                 </a>
             </li>
             <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
@@ -127,5 +129,19 @@
         });
     });
 </script>
+
+<div th:fragment="editor-script">
+    <script src="/frontLib/node_modules/summernote/dist/summernote-bs4.js"></script>
+    <script type="application/javascript">
+        $(function () {
+            $('.editor').summernote({
+                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Hi Melody'],
+                placeholder: '스터디그룹의 목표, 일정, 진행 방식, 사용할 교재 또는 인터넷 강좌 그리고 모집중인 스터디원 등 스터디그룹에 대해 자세히 적어 주세요.',
+                tabsize: 2,
+                height: 300
+            });
+        });
+    </script>
+</div>
 
 </html>
