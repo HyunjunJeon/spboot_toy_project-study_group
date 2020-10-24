@@ -7,4 +7,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public interface StudyGroupRepository extends JpaRepository<StudyGroup, Long> {
     boolean existsByPath(String path);
+    StudyGroup findByPath(String path);
 }

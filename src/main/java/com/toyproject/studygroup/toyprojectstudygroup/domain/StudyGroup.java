@@ -1,5 +1,6 @@
 package com.toyproject.studygroup.toyprojectstudygroup.domain;
 
+import com.toyproject.studygroup.toyprojectstudygroup.account.UserAccount;
 import lombok.*;
 
 import javax.persistence.*;
@@ -56,5 +57,18 @@ public class StudyGroup {
 
     public void addManager(Account account) {
         this.managers.add(account);
+    }
+
+    public boolean isMember(UserAccount userAccount){
+        return this.members.contains(userAccount.getAccount());
+    }
+
+    public boolean isManager(UserAccount userAccount){
+        return this.managers.contains(userAccount.getAccount());
+    }
+
+    public boolean isJoinable(UserAccount userAccount){
+        return this.isPublished() && this.isRecruiting()
+                && !this.isMember(userAccount) && !this.isManager(userAccount);
     }
 }
