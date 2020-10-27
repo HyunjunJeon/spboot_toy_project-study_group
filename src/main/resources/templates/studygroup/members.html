@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:th="http://www.thymeleaf.org">
 <head th:replace="/fragements/fragements :: head"></head>
 <body class="bg-light">
     <div th:replace="/fragements/fragements :: main-nav"></div>
     <div th:replace="/fragements/fragements :: study-banner"></div>
     <div class="container">
         <div th:replace="/fragements/fragements :: study-infomation"></div>
-        <div th:replace="/fragements/fragements :: study-menu(studyMenu='info')"></div>
-        <div class="row px-3 justify-content-center">
-            <div class="col-10 pt-3" th:utext="${studyGroup.fullDescription}"></div>
-        </div>
+        <div th:replace="/fragements/fragements :: study-menu(studyMenu='members')"></div>
+        <div th:replace="/fragements/fragements :: member-list(members=${studyGroup.managers}, isManager=${true})"></div>
+        <div th:replace="/fragements/fragements :: member-list(members=${studyGroup.members}, isManager=${false})"></div>
     </div>
     <div th:replace="/fragements/fragements :: footer"></div>
     <script th:replace="/fragements/fragements :: tooltip"></script>

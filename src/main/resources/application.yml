@@ -22,3 +22,6 @@ server:
     application-display-name: 현준-스터디그룹
     session:
       timeout: 5m
+  tomcat:
+    max-http-form-post-size: 10MB
+
