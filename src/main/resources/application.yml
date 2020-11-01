@@ -23,5 +23,5 @@ server:
     session:
       timeout: 5m
   tomcat:
-    max-http-form-post-size: 10MB
+    max-http-form-post-size: 5MB
 
